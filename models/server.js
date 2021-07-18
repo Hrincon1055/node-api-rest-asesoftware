@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { dbConnection } = require("../database/config");
 /*
  * @autor Henry Rincon
  * Clase encargada de la inicializacion del servidor
@@ -11,10 +12,16 @@ class Server {
     this.app = express();
     this.port = process.env.PORT;
     this.clientPath = "/api/client";
+    // Conectar a base de datos
+    this.conectarDB();
     // Middlewares
     this.middlewares();
     // Inicializacion de las rutas.
     this.routes();
+  }
+  // Metodo para conectar a la base de datos
+  async conectarDB() {
+    await dbConnection();
   }
   // Se colocaran los middlewares usuado en la api
   middlewares() {
