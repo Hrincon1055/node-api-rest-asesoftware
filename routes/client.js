@@ -17,9 +17,13 @@ router.get("/", getClient);
 router.put(
   "/:id",
   [
-    check("nombre", "El nombre es obligatorio.").not().isEmpty(),
     check("id", "No es un id valido.").isMongoId(),
     check("id").custom(existeClientePorId),
+    check("nombre", "El nombre es obligatorio.").not().isEmpty(),
+    check("correo", "El correo no es valido.").isEmail(),
+    check("correo").custom(emailExiste),
+    check("edad", "La edad es obligatoria.").not().isEmpty(),
+    check("fecha_nacimiento", "La fecha de nacimiento es obligatoria."),
     validarCampos,
   ],
   putClient

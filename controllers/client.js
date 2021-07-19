@@ -19,8 +19,8 @@ const getClient = async (req = request, res = response) => {
 // PUT
 const putClient = async (req = request, res = response) => {
   const { id } = req.params;
-  const { _id, correo, ...resto } = req.body;
-  const cliente = await Cliente.findByIdAndUpdate(id, resto);
+  const { _id, ...resto } = req.body;
+  const cliente = await Cliente.findByIdAndUpdate(id, resto, { new: true });
   res.json({
     cliente,
   });
@@ -38,7 +38,11 @@ const postClient = async (req = request, res = response) => {
 // DELETE
 const deleteClient = async (req = request, res = response) => {
   const { id } = req.params;
-  const cliente = await Cliente.findByIdAndUpdate(id, { estado: false });
+  const cliente = await Cliente.findByIdAndUpdate(
+    id,
+    { estado: false },
+    { new: true }
+  );
   res.json({
     cliente,
   });
