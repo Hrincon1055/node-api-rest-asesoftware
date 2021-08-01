@@ -20,10 +20,22 @@ const getClient = async (req = request, res = response) => {
 const putClient = async (req = request, res = response) => {
   const { id } = req.params;
   const { _id, ...resto } = req.body;
-  const cliente = await Cliente.findByIdAndUpdate(id, resto, { new: true });
-  res.json({
-    cliente,
-  });
+  try {
+    const updateEmail = await Cliente.findOne({ correo: resto.correo });
+    if (updateEmail) {
+      if (updateEmail._id.toString() !== id) {
+        return res.status(400).json({
+          msg: `Correo ya esta en uso, intenta con otro correo.`,
+        });
+      }
+    }
+    const cliente = await Cliente.findByIdAndUpdate(id, resto, { new: true });
+    res.json({
+      cliente,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 // POST
 const postClient = async (req = request, res = response) => {
